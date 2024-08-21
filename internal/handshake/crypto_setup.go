@@ -648,6 +648,12 @@ func (h *cryptoSetup) ConnectionState() ConnectionState {
 	}
 }
 
+// [Psiphon]
+func (h *cryptoSetup) TLSConnectionMetrics() tls.ConnectionMetrics {
+	return h.conn.TLSConnectionMetrics()
+}
+
+
 func wrapError(err error) error {
 	if alertErr := tls.AlertError(0); errors.As(err, &alertErr) {
 		return qerr.NewLocalCryptoError(uint8(alertErr), err)

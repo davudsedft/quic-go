@@ -17,6 +17,9 @@ import (
 	quic "github.com/Psiphon-Labs/quic-go"
 	qerr "github.com/Psiphon-Labs/quic-go/internal/qerr"
 	gomock "go.uber.org/mock/gomock"
+
+	// [Psiphon]
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 )
 
 // MockEarlyConnection is a mock of EarlyConnection interface.
@@ -36,6 +39,11 @@ func NewMockEarlyConnection(ctrl *gomock.Controller) *MockEarlyConnection {
 	mock := &MockEarlyConnection{ctrl: ctrl}
 	mock.recorder = &MockEarlyConnectionMockRecorder{mock}
 	return mock
+}
+
+// [Psiphon]
+func (m *MockEarlyConnection) TLSConnectionMetrics() tls.ConnectionMetrics {
+	return tls.ConnectionMetrics{}
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.

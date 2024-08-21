@@ -16,6 +16,9 @@ import (
 	handshake "github.com/Psiphon-Labs/quic-go/internal/handshake"
 	protocol "github.com/Psiphon-Labs/quic-go/internal/protocol"
 	gomock "go.uber.org/mock/gomock"
+
+	// [Psiphon]
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 )
 
 // MockCryptoSetup is a mock of CryptoSetup interface.
@@ -35,6 +38,11 @@ func NewMockCryptoSetup(ctrl *gomock.Controller) *MockCryptoSetup {
 	mock := &MockCryptoSetup{ctrl: ctrl}
 	mock.recorder = &MockCryptoSetupMockRecorder{mock}
 	return mock
+}
+
+// [Psiphon]
+func (m *MockCryptoSetup) TLSConnectionMetrics() tls.ConnectionMetrics {
+	return tls.ConnectionMetrics{}
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.

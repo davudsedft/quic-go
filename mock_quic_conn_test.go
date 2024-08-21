@@ -16,6 +16,9 @@ import (
 
 	qerr "github.com/Psiphon-Labs/quic-go/internal/qerr"
 	gomock "go.uber.org/mock/gomock"
+
+	// [Psiphon]
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 )
 
 // MockQUICConn is a mock of QUICConn interface.
@@ -35,6 +38,11 @@ func NewMockQUICConn(ctrl *gomock.Controller) *MockQUICConn {
 	mock := &MockQUICConn{ctrl: ctrl}
 	mock.recorder = &MockQUICConnMockRecorder{mock}
 	return mock
+}
+
+// [Psiphon]
+func (m *MockQUICConn) TLSConnectionMetrics() tls.ConnectionMetrics {
+	return tls.ConnectionMetrics{}
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
