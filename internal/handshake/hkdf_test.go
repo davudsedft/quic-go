@@ -19,7 +19,7 @@ type cipherSuiteTLS13 struct {
 	Hash   crypto.Hash
 }
 
-//go:linkname cipherSuitesTLS13 crypto/tls.cipherSuitesTLS13
+//go:linkname cipherSuitesTLS13 github.com/Psiphon-Labs/psiphon-tls.cipherSuitesTLS13
 var cipherSuitesTLS13 []unsafe.Pointer
 
 func cipherSuiteTLS13ByID(id uint16) *cipherSuiteTLS13 {
@@ -32,7 +32,7 @@ func cipherSuiteTLS13ByID(id uint16) *cipherSuiteTLS13 {
 	return nil
 }
 
-//go:linkname expandLabel crypto/tls.(*cipherSuiteTLS13).expandLabel
+//go:linkname expandLabel github.com/Psiphon-Labs/psiphon-tls.(*cipherSuiteTLS13).expandLabel
 func expandLabel(cs *cipherSuiteTLS13, secret []byte, label string, context []byte, length int) []byte
 
 func TestHKDF(t *testing.T) {
