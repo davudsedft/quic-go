@@ -1,8 +1,10 @@
 module github.com/Psiphon-Labs/quic-go
 
-go 1.22
+go 1.23
 
 require (
+	github.com/Psiphon-Labs/psiphon-tls v0.0.0-20250213184544-c6a72c25f644
+	github.com/Psiphon-Labs/psiphon-tunnel-core v2.0.28+incompatible
 	github.com/francoispqt/gojay v1.2.13
 	github.com/onsi/ginkgo/v2 v2.9.5
 	github.com/onsi/gomega v1.27.6
