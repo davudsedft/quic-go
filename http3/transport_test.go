@@ -3,17 +3,17 @@ package http3
 import (
 	"bytes"
 	"context"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"errors"
 	"io"
 	"net/http"
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	mockquic "github.com/quic-go/quic-go/internal/mocks/quic"
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/internal/qerr"
+	"github.com/Psiphon-Labs/quic-go"
+	mockquic "github.com/Psiphon-Labs/quic-go/internal/mocks/quic"
+	"github.com/Psiphon-Labs/quic-go/internal/protocol"
+	"github.com/Psiphon-Labs/quic-go/internal/qerr"
 
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"

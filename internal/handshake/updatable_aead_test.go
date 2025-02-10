@@ -2,16 +2,16 @@ package handshake
 
 import (
 	"crypto/rand"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"fmt"
 	mrand "math/rand/v2"
 	"testing"
 	"time"
 
-	mocklogging "github.com/quic-go/quic-go/internal/mocks/logging"
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/internal/qerr"
-	"github.com/quic-go/quic-go/internal/utils"
+	mocklogging "github.com/Psiphon-Labs/quic-go/internal/mocks/logging"
+	"github.com/Psiphon-Labs/quic-go/internal/protocol"
+	"github.com/Psiphon-Labs/quic-go/internal/qerr"
+	"github.com/Psiphon-Labs/quic-go/internal/utils"
 	"go.uber.org/mock/gomock"
 
 	"github.com/stretchr/testify/require"

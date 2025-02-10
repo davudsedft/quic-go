@@ -4,7 +4,7 @@ import (
 	"crypto"
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"fmt"
 
 	"golang.org/x/crypto/chacha20poly1305"

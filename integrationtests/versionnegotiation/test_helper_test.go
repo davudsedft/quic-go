@@ -2,14 +2,14 @@ package versionnegotiation
 
 import (
 	"context"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"crypto/x509"
 	"flag"
 	"os"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/integrationtests/tools"
-	"github.com/quic-go/quic-go/logging"
+	"github.com/Psiphon-Labs/quic-go"
+	"github.com/Psiphon-Labs/quic-go/integrationtests/tools"
+	"github.com/Psiphon-Labs/quic-go/logging"
 )
 
 var (

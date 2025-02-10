@@ -1,13 +1,13 @@
 package http3
 
 import (
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"net"
 	"net/http/httptrace"
 	"net/textproto"
 	"time"
 
-	"github.com/quic-go/quic-go"
+	"github.com/Psiphon-Labs/quic-go"
 )
 
 func traceGetConn(trace *httptrace.ClientTrace, hostPort string) {

@@ -1,12 +1,12 @@
 package qtls
 
 import (
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"net"
 	"reflect"
 	"testing"
 
-	"github.com/quic-go/quic-go/internal/protocol"
+	"github.com/Psiphon-Labs/quic-go/internal/protocol"
 
 	"github.com/stretchr/testify/require"
 )

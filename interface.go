@@ -2,15 +2,15 @@ package quic
 
 import (
 	"context"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"errors"
 	"io"
 	"net"
 	"time"
 
-	"github.com/quic-go/quic-go/internal/handshake"
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/logging"
+	"github.com/Psiphon-Labs/quic-go/internal/handshake"
+	"github.com/Psiphon-Labs/quic-go/internal/protocol"
+	"github.com/Psiphon-Labs/quic-go/logging"
 )
 
 // The StreamID is the ID of a QUIC stream.

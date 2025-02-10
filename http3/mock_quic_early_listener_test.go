@@ -14,7 +14,7 @@ import (
 	net "net"
 	reflect "reflect"
 
-	quic "github.com/quic-go/quic-go"
+	quic "github.com/Psiphon-Labs/quic-go"
 	gomock "go.uber.org/mock/gomock"
 )
 

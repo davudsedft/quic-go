@@ -4,11 +4,11 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"fmt"
 	"testing"
 
-	"github.com/quic-go/quic-go/internal/protocol"
+	"github.com/Psiphon-Labs/quic-go/internal/protocol"
 
 	"github.com/stretchr/testify/require"
 )

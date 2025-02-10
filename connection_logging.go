@@ -3,10 +3,10 @@ package quic
 import (
 	"slices"
 
-	"github.com/quic-go/quic-go/internal/ackhandler"
-	"github.com/quic-go/quic-go/internal/protocol"
-	"github.com/quic-go/quic-go/internal/wire"
-	"github.com/quic-go/quic-go/logging"
+	"github.com/Psiphon-Labs/quic-go/internal/ackhandler"
+	"github.com/Psiphon-Labs/quic-go/internal/protocol"
+	"github.com/Psiphon-Labs/quic-go/internal/wire"
+	"github.com/Psiphon-Labs/quic-go/logging"
 )
 
 // ConvertFrame converts a wire.Frame into a logging.Frame.

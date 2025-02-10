@@ -2,11 +2,11 @@ package self_test
 
 import (
 	"context"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
+	"github.com/Psiphon-Labs/quic-go"
 
 	"github.com/stretchr/testify/require"
 )

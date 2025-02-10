@@ -4,7 +4,7 @@ import (
 	"context"
 	"crypto/rand"
 	"crypto/rsa"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
@@ -12,7 +12,7 @@ import (
 	"log"
 	"math/big"
 
-	"github.com/quic-go/quic-go"
+	"github.com/Psiphon-Labs/quic-go"
 )
 
 const addr = "localhost:4242"

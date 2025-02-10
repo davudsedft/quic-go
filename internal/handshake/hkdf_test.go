@@ -3,7 +3,7 @@ package handshake
 import (
 	"crypto"
 	"crypto/cipher"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"testing"
 	"unsafe"
 

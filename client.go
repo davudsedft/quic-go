@@ -2,11 +2,11 @@ package quic
 
 import (
 	"context"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"errors"
 	"net"
 
-	"github.com/quic-go/quic-go/internal/protocol"
+	"github.com/Psiphon-Labs/quic-go/internal/protocol"
 )
 
 // make it possible to mock connection ID for initial generation in the tests

@@ -2,7 +2,7 @@ package self_test
 
 import (
 	"context"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"errors"
 	"fmt"
 	"net"
@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/quic-go/quic-go"
-	quicproxy "github.com/quic-go/quic-go/integrationtests/tools/proxy"
-	"github.com/quic-go/quic-go/internal/protocol"
+	"github.com/Psiphon-Labs/quic-go"
+	quicproxy "github.com/Psiphon-Labs/quic-go/integrationtests/tools/proxy"
+	"github.com/Psiphon-Labs/quic-go/internal/protocol"
 
 	"github.com/stretchr/testify/require"
 )

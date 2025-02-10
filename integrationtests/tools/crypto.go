@@ -5,7 +5,7 @@ import (
 	"crypto/ed25519"
 	"crypto/rand"
 	"crypto/rsa"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"math/big"

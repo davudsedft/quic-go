@@ -2,11 +2,11 @@ package qtls
 
 import (
 	"bytes"
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"fmt"
 	"net"
 
-	"github.com/quic-go/quic-go/internal/protocol"
+	"github.com/Psiphon-Labs/quic-go/internal/protocol"
 )
 
 func SetupConfigForServer(

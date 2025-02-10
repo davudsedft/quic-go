@@ -1,18 +1,18 @@
 package main
 
 import (
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"os"
 
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3"
-	"github.com/quic-go/quic-go/internal/qtls"
-	"github.com/quic-go/quic-go/interop/http09"
-	"github.com/quic-go/quic-go/interop/utils"
+	"github.com/Psiphon-Labs/quic-go"
+	"github.com/Psiphon-Labs/quic-go/http3"
+	"github.com/Psiphon-Labs/quic-go/internal/qtls"
+	"github.com/Psiphon-Labs/quic-go/interop/http09"
+	"github.com/Psiphon-Labs/quic-go/interop/utils"
 )
 
 func main() {

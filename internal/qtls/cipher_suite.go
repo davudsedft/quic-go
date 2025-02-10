@@ -1,7 +1,7 @@
 package qtls
 
 import (
-	"crypto/tls"
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"fmt"
 	"unsafe"
 )
