@@ -640,7 +640,10 @@ func (s *Server) handleRequest(conn *connection, str quic.Stream, datagrams *dat
 	}
 
 	connState := conn.ConnectionState().TLS
-	req.TLS = &connState
+
+	// [Psiphon]
+	req.TLS = tls.UnsafeFromConnectionState(&connState)
+
 	req.RemoteAddr = conn.RemoteAddr().String()
 
 	// Check that the client doesn't send more data in DATA frames than indicated by the Content-Length header (if set).

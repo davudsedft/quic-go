@@ -16,6 +16,8 @@ import (
 	"github.com/Psiphon-Labs/quic-go/quicvarint"
 
 	"github.com/quic-go/qpack"
+
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 )
 
 const (
@@ -351,7 +353,10 @@ func (c *ClientConn) doRequest(req *http.Request, str *requestStream) (*http.Res
 		break
 	}
 	connState := c.connection.ConnectionState().TLS
-	res.TLS = &connState
+
+	// [Psiphon]
+	res.TLS = tls.UnsafeFromConnectionState(&connState)
+
 	res.Request = req
 	return res, nil
 }

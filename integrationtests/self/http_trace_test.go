@@ -2,7 +2,6 @@ package self_test
 
 import (
 	"context"
-	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"fmt"
 	"net"
 	"net/http"
@@ -10,6 +9,10 @@ import (
 	"net/textproto"
 	"testing"
 	"time"
+
+	tls "github.com/Psiphon-Labs/psiphon-tls"
+
+	std_tls "crypto/tls"
 
 	"github.com/stretchr/testify/require"
 )
@@ -47,8 +50,10 @@ func TestHTTPClientTrace(t *testing.T) {
 			eventQueue <- event{Key: "ConnectDone", Args: map[string]any{"network": network, "addr": addr, "err": err}}
 		},
 		TLSHandshakeStart: func() { eventQueue <- event{Key: "TLSHandshakeStart"} },
-		TLSHandshakeDone: func(state tls.ConnectionState, err error) {
-			eventQueue <- event{Key: "TLSHandshakeDone", Args: map[string]any{"state": state, "err": err}}
+		// [Psiphon]
+		TLSHandshakeDone: func(state std_tls.ConnectionState, err error) {
+			cs := *tls.UnsafeToConnectionState(&state)
+			eventQueue <- event{Key: "TLSHandshakeDone", Args: map[string]any{"state": cs, "err": err}}
 		},
 		WroteHeaderField: func(key string, value []string) {
 			if key != ":authority" {

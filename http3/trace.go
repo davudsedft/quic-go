@@ -1,11 +1,12 @@
 package http3
 
 import (
-	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"net"
 	"net/http/httptrace"
 	"net/textproto"
 	"time"
+
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 
 	"github.com/Psiphon-Labs/quic-go"
 )
@@ -100,6 +101,10 @@ func traceTLSHandshakeStart(trace *httptrace.ClientTrace) {
 
 func traceTLSHandshakeDone(trace *httptrace.ClientTrace, state tls.ConnectionState, err error) {
 	if trace != nil && trace.TLSHandshakeDone != nil {
+
+		// [Psiphon]
+		state := *tls.UnsafeFromConnectionState(&state)
+
 		trace.TLSHandshakeDone(state, err)
 	}
 }
