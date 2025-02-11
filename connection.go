@@ -3,7 +3,6 @@ package quic
 import (
 	"bytes"
 	"context"
-	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"errors"
 	"fmt"
 	"io"
@@ -12,6 +11,8 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 
 	"github.com/Psiphon-Labs/quic-go/internal/ackhandler"
 	"github.com/Psiphon-Labs/quic-go/internal/flowcontrol"
@@ -22,6 +23,30 @@ import (
 	"github.com/Psiphon-Labs/quic-go/internal/wire"
 	"github.com/Psiphon-Labs/quic-go/logging"
 )
+
+// [Psiphon]
+func getMaxPacketSize(s *connection) protocol.ByteCount {
+	initialMaxPacketSizeAdjustment := 0
+	if s.config.ServerMaxPacketSizeAdjustment != nil {
+		initialMaxPacketSizeAdjustment = s.config.ServerMaxPacketSizeAdjustment(s.RemoteAddr())
+	}
+
+	// Adjust the max packet size to allow for obfuscation overhead. This
+	// is a best-effort operation. In practice, maxPacketSizeAdustment
+	// will be tens of bytes and maxSize is over 1200 bytes; the
+	// condition here is a sanity check guard to prevent negative sizes
+	// and possible panics. We don't expect to need to make the largest
+	// adustment that would be possible when the condition is false.
+	//
+	// TODO: internal/congestion.cubicSender continues to use
+	// initialMaxDatagramSize = protocol.InitialPacketSizeIPv4
+	initialMaxPacketSize := protocol.ByteCount(s.config.InitialPacketSize)
+	if initialMaxPacketSize > protocol.ByteCount(initialMaxPacketSizeAdjustment) {
+		initialMaxPacketSize -= protocol.ByteCount(initialMaxPacketSizeAdjustment)
+	}
+
+	return initialMaxPacketSize
+}
 
 type unpacker interface {
 	UnpackLongHeader(hdr *wire.Header, data []byte) (*unpackedPacket, error)
@@ -270,9 +295,17 @@ var newConnection = func(
 		connIDGenerator,
 	)
 	s.preSetup()
+
+	// [Psiphon]
+	initialMaxPacketSize := getMaxPacketSize(s)
+
 	s.sentPacketHandler, s.receivedPacketHandler = ackhandler.NewAckHandler(
 		0,
-		protocol.ByteCount(s.config.InitialPacketSize),
+
+		// [Psiphon]
+		// protocol.ByteCount(s.config.InitialPacketSize),
+		initialMaxPacketSize,
+
 		s.rttStats,
 		clientAddressValidated,
 		s.conn.capabilities().ECN,
@@ -280,7 +313,11 @@ var newConnection = func(
 		s.tracer,
 		s.logger,
 	)
-	s.maxPayloadSizeEstimate.Store(uint32(estimateMaxPayloadSize(protocol.ByteCount(s.config.InitialPacketSize))))
+
+	// [Psiphon]
+	// s.maxPayloadSizeEstimate.Store(uint32(estimateMaxPayloadSize(protocol.ByteCount(s.config.InitialPacketSize))))
+	s.maxPayloadSizeEstimate.Store(uint32(estimateMaxPayloadSize(initialMaxPacketSize)))
+
 	statelessResetToken := statelessResetter.GetStatelessResetToken(srcConnID)
 	params := &wire.TransportParameters{
 		InitialMaxStreamDataBidiLocal:   protocol.ByteCount(s.config.InitialStreamReceiveWindow),
@@ -384,7 +421,11 @@ var newClientConnection = func(
 	s.preSetup()
 	s.sentPacketHandler, s.receivedPacketHandler = ackhandler.NewAckHandler(
 		initialPacketNumber,
-		protocol.ByteCount(s.config.InitialPacketSize),
+
+		// [Psiphon]
+		// protocol.ByteCount(s.config.InitialPacketSize),
+		getMaxPacketSize(s),
+
 		s.rttStats,
 		false, // has no effect
 		s.conn.capabilities().ECN,
@@ -426,6 +467,11 @@ var newClientConnection = func(
 		destConnID,
 		params,
 		tlsConf,
+
+		// [Psiphon]
+		conf.ClientHelloSeed,
+		conf.GetClientHelloRandom,
+
 		enable0RTT,
 		s.rttStats,
 		tracer,
@@ -1823,13 +1869,33 @@ func (s *connection) applyTransportParameters() {
 		// Retire the connection ID.
 		s.connIDManager.AddFromPreferredAddress(params.PreferredAddress.ConnectionID, params.PreferredAddress.StatelessResetToken)
 	}
+
+	// [Psiphon]
+	// Adjust the max packet size to allow for obfuscation overhead.
+	maxPacketSizeAdjustment := 0
+	if s.config.ServerMaxPacketSizeAdjustment != nil {
+		maxPacketSizeAdjustment = s.config.ServerMaxPacketSizeAdjustment(s.conn.RemoteAddr())
+	} else {
+		maxPacketSizeAdjustment = s.config.ClientMaxPacketSizeAdjustment
+	}
+
 	maxPacketSize := protocol.ByteCount(protocol.MaxPacketBufferSize)
 	if params.MaxUDPPayloadSize > 0 && params.MaxUDPPayloadSize < maxPacketSize {
 		maxPacketSize = params.MaxUDPPayloadSize
 	}
+
+	// [Psiphon]
+	if maxPacketSize > protocol.ByteCount(maxPacketSizeAdjustment) {
+		maxPacketSize -= protocol.ByteCount(maxPacketSizeAdjustment)
+	}
+
 	s.mtuDiscoverer = newMTUDiscoverer(
 		s.rttStats,
-		protocol.ByteCount(s.config.InitialPacketSize),
+
+		// [Psiphon]
+		// protocol.ByteCount(s.config.InitialPacketSize),
+		getMaxPacketSize(s),
+
 		maxPacketSize,
 		s.onMTUIncreased,
 		s.tracer,

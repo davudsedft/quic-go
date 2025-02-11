@@ -134,7 +134,10 @@ const MinPacingDelay = time.Millisecond
 
 // DefaultConnectionIDLength is the connection ID length that is used for multiplexed connections
 // if no other value is configured.
-const DefaultConnectionIDLength = 4
+// const DefaultConnectionIDLength = 4
+
+// [Psiphon]
+const DefaultConnectionIDLength = 8
 
 // MaxActiveConnectionIDs is the number of connection IDs that we're storing.
 const MaxActiveConnectionIDs = 4

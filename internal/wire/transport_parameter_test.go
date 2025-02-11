@@ -100,7 +100,7 @@ func TestMarshalAndUnmarshalTransportParameters(t *testing.T) {
 		MaxUDPPayloadSize:               1200 + protocol.ByteCount(getRandomValueUpTo(quicvarint.Max-1200)),
 		MaxDatagramFrameSize:            protocol.ByteCount(getRandomValue()),
 	}
-	data := params.Marshal(protocol.PerspectiveServer)
+	data := params.Marshal(protocol.PerspectiveServer, nil)
 
 	p := &TransportParameters{}
 	require.NoError(t, p.Unmarshal(data, protocol.PerspectiveServer))
@@ -133,15 +133,15 @@ func TestMarshalAdditionalTransportParameters(t *testing.T) {
 	result = append(result, []byte("foobar")...)
 
 	params := &TransportParameters{}
-	require.True(t, bytes.Contains(params.Marshal(protocol.PerspectiveClient), result))
-	require.False(t, bytes.Contains(params.Marshal(protocol.PerspectiveServer), result))
+	require.True(t, bytes.Contains(params.Marshal(protocol.PerspectiveClient, nil), result))
+	require.False(t, bytes.Contains(params.Marshal(protocol.PerspectiveServer, nil), result))
 }
 
 func TestMarshalWithoutRetrySourceConnectionID(t *testing.T) {
 	data := (&TransportParameters{
 		StatelessResetToken:     &protocol.StatelessResetToken{},
 		ActiveConnectionIDLimit: 2,
-	}).Marshal(protocol.PerspectiveServer)
+	}).Marshal(protocol.PerspectiveServer, nil)
 	p := &TransportParameters{}
 	require.NoError(t, p.Unmarshal(data, protocol.PerspectiveServer))
 	require.Nil(t, p.RetrySourceConnectionID)
@@ -153,7 +153,7 @@ func TestMarshalZeroLengthRetrySourceConnectionID(t *testing.T) {
 		RetrySourceConnectionID: &rcid,
 		StatelessResetToken:     &protocol.StatelessResetToken{},
 		ActiveConnectionIDLimit: 2,
-	}).Marshal(protocol.PerspectiveServer)
+	}).Marshal(protocol.PerspectiveServer, nil)
 	p := &TransportParameters{}
 	require.NoError(t, p.Unmarshal(data, protocol.PerspectiveServer))
 	require.NotNil(t, p.RetrySourceConnectionID)
@@ -168,12 +168,12 @@ func TestTransportParameterNoMaxAckDelayIfDefault(t *testing.T) {
 		dataDefault := (&TransportParameters{
 			MaxAckDelay:         protocol.DefaultMaxAckDelay,
 			StatelessResetToken: &protocol.StatelessResetToken{},
-		}).Marshal(protocol.PerspectiveServer)
+		}).Marshal(protocol.PerspectiveServer, nil)
 		defaultLen += len(dataDefault)
 		data := (&TransportParameters{
 			MaxAckDelay:         maxAckDelay,
 			StatelessResetToken: &protocol.StatelessResetToken{},
-		}).Marshal(protocol.PerspectiveServer)
+		}).Marshal(protocol.PerspectiveServer, nil)
 		dataLen += len(data)
 	}
 	entryLen := quicvarint.Len(uint64(ackDelayExponentParameterID)) +
@@ -189,12 +189,12 @@ func TestTransportParameterNoAckDelayExponentIfDefault(t *testing.T) {
 		dataDefault := (&TransportParameters{
 			AckDelayExponent:    protocol.DefaultAckDelayExponent,
 			StatelessResetToken: &protocol.StatelessResetToken{},
-		}).Marshal(protocol.PerspectiveServer)
+		}).Marshal(protocol.PerspectiveServer, nil)
 		defaultLen += len(dataDefault)
 		data := (&TransportParameters{
 			AckDelayExponent:    protocol.DefaultAckDelayExponent + 1,
 			StatelessResetToken: &protocol.StatelessResetToken{},
-		}).Marshal(protocol.PerspectiveServer)
+		}).Marshal(protocol.PerspectiveServer, nil)
 		dataLen += len(data)
 	}
 	entryLen := quicvarint.Len(uint64(ackDelayExponentParameterID)) +
@@ -208,7 +208,7 @@ func TestTransportParameterSetsDefaultValuesWhenNotSent(t *testing.T) {
 		AckDelayExponent:        protocol.DefaultAckDelayExponent,
 		StatelessResetToken:     &protocol.StatelessResetToken{},
 		ActiveConnectionIDLimit: protocol.DefaultActiveConnectionIDLimit,
-	}).Marshal(protocol.PerspectiveServer)
+	}).Marshal(protocol.PerspectiveServer, nil)
 	p := &TransportParameters{}
 	require.NoError(t, p.Unmarshal(data, protocol.PerspectiveServer))
 	require.EqualValues(t, protocol.DefaultAckDelayExponent, p.AckDelayExponent)
@@ -379,7 +379,7 @@ func TestTransportParameterErrors(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			var err error
 			if tt.params != nil {
-				data := tt.params.Marshal(tt.perspective)
+				data := tt.params.Marshal(tt.perspective, nil)
 				err = (&TransportParameters{}).Unmarshal(data, tt.perspective)
 			} else {
 				err = (&TransportParameters{}).Unmarshal(tt.data, tt.perspective)
@@ -448,7 +448,7 @@ func TestPreferredAddressMarshalAndUnmarshal(t *testing.T) {
 		PreferredAddress:        pa,
 		StatelessResetToken:     &protocol.StatelessResetToken{},
 		ActiveConnectionIDLimit: 2,
-	}).Marshal(protocol.PerspectiveServer)
+	}).Marshal(protocol.PerspectiveServer, nil)
 	p := &TransportParameters{}
 	err := p.Unmarshal(data, protocol.PerspectiveServer)
 	require.NoError(t, err)
@@ -481,7 +481,7 @@ func TestPreferredAddressZeroLengthConnectionID(t *testing.T) {
 	data := (&TransportParameters{
 		PreferredAddress:    pa,
 		StatelessResetToken: &protocol.StatelessResetToken{},
-	}).Marshal(protocol.PerspectiveServer)
+	}).Marshal(protocol.PerspectiveServer, nil)
 	p := &TransportParameters{}
 	err := p.Unmarshal(data, protocol.PerspectiveServer)
 	require.Error(t, err)
@@ -831,7 +831,7 @@ func benchmarkTransportParameters(b *testing.B, withPreferredAddress bool) {
 			StatelessResetToken: token2,
 		}
 	}
-	data := params.Marshal(protocol.PerspectiveServer)
+	data := params.Marshal(protocol.PerspectiveServer, nil)
 
 	b.ResetTimer()
 	b.ReportAllocs()

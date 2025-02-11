@@ -2,9 +2,10 @@ package qtls
 
 import (
 	"bytes"
-	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"fmt"
 	"net"
+
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 
 	"github.com/Psiphon-Labs/quic-go/internal/protocol"
 )
@@ -147,4 +148,9 @@ func findExtraData(extras [][]byte) []byte {
 		return extra[len(prefix):]
 	}
 	return nil
+}
+
+// [Psiphon]
+func ReadClientHelloRandom(data []byte) ([]byte, error) {
+	return tls.ReadClientHelloRandom(data)
 }

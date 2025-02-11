@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
-	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"log"
 	"net"
+
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 
 	fuzzhandshake "github.com/Psiphon-Labs/quic-go/fuzzing/handshake"
 	"github.com/Psiphon-Labs/quic-go/fuzzing/internal/helper"
@@ -28,6 +29,10 @@ func main() {
 			RootCAs:            testdata.GetRootCA(),
 			ClientSessionCache: tls.NewLRUClientSessionCache(1),
 		},
+
+		// [Psiphon]
+		nil, nil,
+
 		false,
 		&utils.RTTStats{},
 		nil,

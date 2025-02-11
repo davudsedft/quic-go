@@ -20,22 +20,32 @@ func TestGenerateRandomConnectionIDs(t *testing.T) {
 	require.Equal(t, 8, c2.Len())
 }
 
-func TestGenerateRandomLengthDestinationConnectionIDs(t *testing.T) {
-	var has8ByteConnID, has20ByteConnID bool
+// [Psiphon]
+// func TestGenerateRandomLengthDestinationConnectionIDs(t *testing.T) {
+// 	var has8ByteConnID, has20ByteConnID bool
+// 	for i := 0; i < 1000; i++ {
+// 		c, err := GenerateConnectionIDForInitial()
+// 		require.NoError(t, err)
+// 		require.GreaterOrEqual(t, c.Len(), 8)
+// 		require.LessOrEqual(t, c.Len(), 20)
+// 		if c.Len() == 8 {
+// 			has8ByteConnID = true
+// 		}
+// 		if c.Len() == 20 {
+// 			has20ByteConnID = true
+// 		}
+// 	}
+// 	require.True(t, has8ByteConnID)
+// 	require.True(t, has20ByteConnID)
+// }
+
+// [Psiphon]
+func TestGenerateFixedSizeDestinationConnectionIDs(t *testing.T) {
 	for i := 0; i < 1000; i++ {
 		c, err := GenerateConnectionIDForInitial()
 		require.NoError(t, err)
-		require.GreaterOrEqual(t, c.Len(), 8)
-		require.LessOrEqual(t, c.Len(), 20)
-		if c.Len() == 8 {
-			has8ByteConnID = true
-		}
-		if c.Len() == 20 {
-			has20ByteConnID = true
-		}
+		require.Equal(t, 8, c.Len())
 	}
-	require.True(t, has8ByteConnID)
-	require.True(t, has20ByteConnID)
 }
 
 func TestConnectionID(t *testing.T) {

@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/rand"
 	"crypto/rsa"
-	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"errors"
@@ -12,6 +11,8 @@ import (
 	"net"
 	"testing"
 	"time"
+
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 
 	"github.com/Psiphon-Labs/quic-go/internal/protocol"
 	"github.com/Psiphon-Labs/quic-go/internal/qerr"
@@ -69,6 +70,10 @@ func TestErrorBeforeClientHelloGeneration(t *testing.T) {
 		protocol.ConnectionID{},
 		&wire.TransportParameters{},
 		tlsConf,
+
+		// [Psiphon]
+		nil, nil,
+
 		false,
 		&utils.RTTStats{},
 		nil,
@@ -197,6 +202,10 @@ func handshakeWithTLSConf(
 		protocol.ConnectionID{},
 		clientTransportParameters,
 		clientConf,
+
+		// [Psiphon]
+		nil, nil,
+
 		enable0RTT,
 		clientRTTStats,
 		nil,
@@ -290,6 +299,10 @@ func TestTransportParameters(t *testing.T) {
 		protocol.ConnectionID{},
 		cTransportParameters,
 		clientConf,
+
+		// [Psiphon]
+		nil, nil,
+
 		false,
 		&utils.RTTStats{},
 		nil,

@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/rand"
 	"crypto/rsa"
-	tls "github.com/Psiphon-Labs/psiphon-tls"
 	"crypto/x509"
 	"errors"
 	"fmt"
@@ -14,6 +13,8 @@ import (
 	mrand "math/rand"
 	"net"
 	"time"
+
+	tls "github.com/Psiphon-Labs/psiphon-tls"
 
 	"github.com/Psiphon-Labs/quic-go/fuzzing/internal/helper"
 	"github.com/Psiphon-Labs/quic-go/internal/handshake"
@@ -281,6 +282,10 @@ func runHandshake(runConfig [confLen]byte, messageConfig uint8, clientConf *tls.
 		protocol.ConnectionID{},
 		clientTP,
 		clientConf,
+
+		// [Psiphon]
+		nil, nil,
+
 		enable0RTTClient,
 		&utils.RTTStats{},
 		nil,

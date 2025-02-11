@@ -1,8 +1,12 @@
 //go:build tools
+// +build tools
 
 package quic
 
-import (
-	_ "github.com/onsi/ginkgo/v2/ginkgo"
-	_ "go.uber.org/mock/mockgen"
-)
+// [Psiphon]
+// Avoid vendoring testing dependencies
+
+// import (
+// 	_ "github.com/onsi/ginkgo/v2/ginkgo"
+// 	_ "go.uber.org/mock/mockgen"
+// )
