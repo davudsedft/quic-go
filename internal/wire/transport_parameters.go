@@ -494,8 +494,10 @@ func (p *TransportParameters) marshalClientRandomized(clientHelloPRNG *prng.PRNG
 			b = p.marshalVarintParam(b, maxIdleTimeoutParameterID, uint64(p.MaxIdleTimeout/time.Millisecond))
 		},
 		func() {
-			// max_packet_size
-			b = p.marshalVarintParam(b, maxUDPPayloadSizeParameterID, uint64(protocol.MaxPacketBufferSize))
+			// max_udp_payload_size
+			if p.MaxUDPPayloadSize > 0 {
+				b = p.marshalVarintParam(b, maxUDPPayloadSizeParameterID, uint64(p.MaxUDPPayloadSize))
+			}
 		},
 		func() {
 			// max_ack_delay
@@ -520,7 +522,9 @@ func (p *TransportParameters) marshalClientRandomized(clientHelloPRNG *prng.PRNG
 		},
 		func() {
 			// active_connection_id_limit
-			b = p.marshalVarintParam(b, activeConnectionIDLimitParameterID, p.ActiveConnectionIDLimit)
+			if p.ActiveConnectionIDLimit != protocol.DefaultActiveConnectionIDLimit {
+				b = p.marshalVarintParam(b, activeConnectionIDLimitParameterID, p.ActiveConnectionIDLimit)
+			}
 		},
 		func() {
 			// initial_source_connection_id
